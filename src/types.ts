@@ -19,3 +19,11 @@ export interface QuizState {
   showFeedback: boolean;
   selectedOption: number | null;
 }
+
+export interface QuizSession {
+  id: string;
+  date: string;
+  score: number;
+  total: number;
+  answers: { questionId: string; questionText: string; selectedIndex: number; correctIndex: number }[];
+}

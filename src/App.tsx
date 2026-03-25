@@ -27,7 +27,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-screen relative">
+    <div className="w-full max-w-md mx-auto min-h-[100dvh] relative">
       {screen === 'home' && (
         <HomeScreen
           onStart={handleStart}

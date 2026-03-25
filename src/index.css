@@ -34,5 +34,5 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(180deg, var(--color-bg-gradient-top) 0%, var(--color-bg-gradient-bottom) 100%);
-  min-height: 100vh;
+  min-height: 100dvh;
 }

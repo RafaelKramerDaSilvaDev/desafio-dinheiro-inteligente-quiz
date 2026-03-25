@@ -1,3 +1,5 @@
+import { TitleBadge, Coin, CoinSmall, WaveHeader } from './icons';
+
 interface HomeScreenProps {
   onStart: () => void;
   onAdmin: () => void;
@@ -5,39 +7,32 @@ interface HomeScreenProps {
 
 export default function HomeScreen({ onStart, onAdmin }: HomeScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen w-full px-6 py-8 text-center">
-      {/* Header logos */}
-      <div className="flex items-center justify-center gap-4 mb-4">
-        <span className="text-white font-bold text-lg tracking-wide bg-primary rounded px-3 py-1">
-          UNO
-          <span className="block text-[10px] font-normal -mt-1">SÃO LOURENÇO</span>
-        </span>
-        <div className="w-px h-8 bg-white/50" />
-        <span className="text-primary font-bold text-lg">
-          ✦ SICOOB
-        </span>
+    <div className="flex flex-col items-center justify-between min-h-[100dvh] w-full text-center">
+      {/* Header with logos */}
+      <div className="relative w-full">
+        <div className="bg-gradient-to-r from-primary-dark to-primary pt-4 pb-6 px-6">
+          <div className="flex items-center justify-center gap-4">
+            <img src="/logos/uno.svg" alt="UNO São Lourenço" className="h-10 w-auto brightness-0 invert" />
+            <div className="w-px h-8 bg-white/30" />
+            <img src="/logos/sicoob.png" alt="Sicoob" className="h-10 w-auto" />
+          </div>
+        </div>
+        <WaveHeader className="w-full h-5 text-primary -mt-px" />
       </div>
 
       {/* Title area */}
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center px-6">
         <div className="relative mb-6">
-          <div className="bg-gradient-to-b from-primary to-primary-dark rounded-2xl px-8 py-6 shadow-lg border-2 border-accent-gold relative">
-            {/* Coins decoration */}
-            <div className="absolute -top-3 -left-3 w-8 h-8 bg-accent-yellow rounded-full border-2 border-accent-gold shadow-md flex items-center justify-center text-xs font-bold text-primary-dark">$</div>
-            <div className="absolute -top-2 -right-4 w-6 h-6 bg-accent-yellow rounded-full border-2 border-accent-gold shadow-md flex items-center justify-center text-[10px] font-bold text-primary-dark">$</div>
-            <div className="absolute -bottom-2 -left-2 w-5 h-5 bg-accent-yellow rounded-full border-2 border-accent-gold shadow-md flex items-center justify-center text-[9px] font-bold text-primary-dark">$</div>
-            <div className="absolute -bottom-3 right-2 w-7 h-7 bg-accent-yellow rounded-full border-2 border-accent-gold shadow-md flex items-center justify-center text-[11px] font-bold text-primary-dark">$</div>
+          {/* Floating coins */}
+          <Coin size={38} className="absolute -top-5 -left-6 animate-bounce" />
+          <Coin size={28} className="absolute -top-4 -right-7 animate-bounce [animation-delay:0.3s]" />
+          <CoinSmall className="absolute -bottom-3 -left-5 animate-bounce [animation-delay:0.6s]" />
+          <Coin size={32} className="absolute -bottom-5 -right-4 animate-bounce [animation-delay:0.9s]" />
+          <CoinSmall className="absolute top-1/2 -left-9 -translate-y-1/2 animate-bounce [animation-delay:0.4s]" />
+          <CoinSmall className="absolute top-1/3 -right-10 animate-bounce [animation-delay:0.7s]" />
 
-            <h1 className="text-white text-sm font-medium tracking-widest uppercase mb-1">
-              Desafio do
-            </h1>
-            <h2 className="text-accent-yellow text-3xl sm:text-4xl font-extrabold leading-tight drop-shadow-md">
-              DINHEIRO
-            </h2>
-            <h2 className="text-white text-2xl sm:text-3xl font-extrabold leading-tight drop-shadow-md">
-              INTELIGENTE
-            </h2>
-          </div>
+          {/* Title badge SVG */}
+          <TitleBadge className="w-72 sm:w-80 h-auto" />
         </div>
 
         <p className="text-secondary text-base sm:text-lg max-w-xs leading-relaxed mb-8">
@@ -57,7 +52,7 @@ export default function HomeScreen({ onStart, onAdmin }: HomeScreenProps) {
       {/* Admin link */}
       <button
         onClick={onAdmin}
-        className="mt-8 text-xs text-secondary/40 hover:text-secondary/70 transition-colors"
+        className="my-6 text-xs text-secondary/40 hover:text-secondary/70 transition-colors"
       >
         Configurações
       </button>
