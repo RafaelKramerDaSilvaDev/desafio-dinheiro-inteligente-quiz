@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768" width="1024" height="768">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c8e6d0"/>
+      <stop offset="100%" stop-color="#e8f4f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="768" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1024" height="80" fill="#0d5e2e"/>
+  <text x="400" y="50" font-size="28" font-weight="bold" fill="white" font-family="Arial">UNO</text>
+  <text x="540" y="50" font-size="28" font-weight="bold" fill="white" font-family="Arial">SICOOB</text>
+  <rect x="362" y="180" width="300" height="150" rx="20" fill="#0d5e2e"/>
+  <text x="512" y="240" text-anchor="middle" font-size="22" font-weight="bold" fill="white" font-family="Arial">DESAFIO DO</text>
+  <text x="512" y="275" text-anchor="middle" font-size="30" font-weight="bold" fill="#f5d442" font-family="Arial">DINHEIRO</text>
+  <text x="512" y="310" text-anchor="middle" font-size="26" font-weight="bold" fill="#f5d442" font-family="Arial">INTELIGENTE</text>
+  <text x="512" y="420" text-anchor="middle" font-size="18" fill="#1a3a6b" font-family="Arial">Teste seus conhecimentos sobre educação financeira!</text>
+  <rect x="382" y="500" width="260" height="60" rx="14" fill="#0d5e2e"/>
+  <text x="512" y="538" text-anchor="middle" font-size="20" font-weight="bold" fill="white" font-family="Arial">COMEÇAR O DESAFIO</text>
+</svg>

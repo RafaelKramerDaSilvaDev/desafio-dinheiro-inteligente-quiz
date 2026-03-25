@@ -9,11 +9,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/*.svg'],
+      includeAssets: ['favicon.svg', 'icons/*.png', 'icons/*.svg', 'screenshots/*.png'],
       manifest: {
+        id: '/',
         name: 'Desafio do Dinheiro Inteligente',
         short_name: 'Quiz Financeiro',
-        description: 'Teste seus conhecimentos sobre educação financeira!',
+        description: 'Teste seus conhecimentos sobre educação financeira e ganhe brindes!',
         theme_color: '#0d5e2e',
         background_color: '#e8f4f8',
         display: 'standalone',
@@ -21,20 +22,41 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/icons/icon-192.svg',
+            src: '/icons/icon-192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
           },
           {
-            src: '/icons/icon-512.svg',
+            src: '/icons/icon-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
           },
           {
-            src: '/icons/icon-512.svg',
+            src: '/icons/icon-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'maskable',
+          },
+          {
+            src: '/icons/icon-192.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+          },
+        ],
+        screenshots: [
+          {
+            src: '/screenshots/screenshot-narrow.png',
+            sizes: '540x960',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Tela inicial do Desafio do Dinheiro Inteligente',
+          },
+          {
+            src: '/screenshots/screenshot-wide.png',
+            sizes: '1024x768',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Tela inicial do Desafio do Dinheiro Inteligente em desktop',
           },
         ],
       },
