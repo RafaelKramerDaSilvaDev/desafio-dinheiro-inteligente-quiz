@@ -1,4 +1,4 @@
-import { TitleBadge, Coin, CoinSmall, WaveHeader } from './icons';
+import { Coin, CoinSmall, TitleBadge, WaveHeader } from "./icons";
 
 interface HomeScreenProps {
   onStart: () => void;
@@ -12,7 +12,11 @@ export default function HomeScreen({ onStart, onAdmin }: HomeScreenProps) {
       <div className="relative w-full">
         <div className="bg-gradient-to-r from-primary-dark to-primary pt-4 pb-6 px-6">
           <div className="flex items-center justify-center gap-4">
-            <img src="/logos/uno.svg" alt="UNO São Lourenço" className="h-10 w-auto brightness-0 invert" />
+            <img
+              src="/logos/uno.png"
+              alt="UNO São Lourenço"
+              className="h-10 w-auto brightness-0 invert"
+            />
             <div className="w-px h-8 bg-white/30" />
             <img src="/logos/sicoob.png" alt="Sicoob" className="h-10 w-auto" />
           </div>
@@ -25,9 +29,15 @@ export default function HomeScreen({ onStart, onAdmin }: HomeScreenProps) {
         <div className="relative mb-6">
           {/* Floating coins */}
           <Coin size={38} className="absolute -top-5 -left-6 animate-bounce" />
-          <Coin size={28} className="absolute -top-4 -right-7 animate-bounce [animation-delay:0.3s]" />
+          <Coin
+            size={28}
+            className="absolute -top-4 -right-7 animate-bounce [animation-delay:0.3s]"
+          />
           <CoinSmall className="absolute -bottom-3 -left-5 animate-bounce [animation-delay:0.6s]" />
-          <Coin size={32} className="absolute -bottom-5 -right-4 animate-bounce [animation-delay:0.9s]" />
+          <Coin
+            size={32}
+            className="absolute -bottom-5 -right-4 animate-bounce [animation-delay:0.9s]"
+          />
           <CoinSmall className="absolute top-1/2 -left-9 -translate-y-1/2 animate-bounce [animation-delay:0.4s]" />
           <CoinSmall className="absolute top-1/3 -right-10 animate-bounce [animation-delay:0.7s]" />
 
@@ -36,8 +46,8 @@ export default function HomeScreen({ onStart, onAdmin }: HomeScreenProps) {
         </div>
 
         <p className="text-secondary text-base sm:text-lg max-w-xs leading-relaxed mb-8">
-          Teste seus conhecimentos sobre{' '}
-          <strong>educação financeira</strong> e ganhe brindes!
+          Teste seus conhecimentos sobre <strong>educação financeira</strong> e
+          ganhe brindes!
         </p>
 
         <button
