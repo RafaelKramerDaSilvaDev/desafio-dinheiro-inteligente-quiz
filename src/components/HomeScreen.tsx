@@ -61,11 +61,22 @@ export default function HomeScreen({ sessionName, quizName, onStart, onAdmin }: 
         <button
           id="btn-start"
           onClick={onStart}
-          className="group relative bg-gradient-to-b from-primary to-primary-dark text-white font-bold text-lg md:text-xl px-10 md:px-14 py-4 md:py-5 rounded-2xl shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:from-primary-light hover:to-primary active:scale-95 border-b-4 border-primary-darker uppercase tracking-wider flex items-center gap-3 animate-fade-in-up [animation-delay:0.2s] animate-pulse-glow"
+          disabled={!sessionName}
+          className={`group relative font-bold text-lg md:text-xl px-10 md:px-14 py-4 md:py-5 rounded-2xl uppercase tracking-wider flex items-center gap-3 animate-fade-in-up [animation-delay:0.2s] ${
+            sessionName
+              ? 'bg-gradient-to-b from-primary to-primary-dark text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:from-primary-light hover:to-primary active:scale-95 border-b-4 border-primary-darker animate-pulse-glow'
+              : 'bg-slate-300 text-white/70 border-b-4 border-slate-400 cursor-not-allowed'
+          }`}
         >
           <Play size={22} className="fill-white" />
           Começar o Desafio
         </button>
+
+        {!sessionName && (
+          <p className="mt-4 text-sm text-slate-400 animate-fade-in-up [animation-delay:0.25s]">
+            Nenhuma sessão configurada. Acesse as <strong className="text-slate-500">Configurações</strong> para criar uma.
+          </p>
+        )}
       </div>
 
       <button
