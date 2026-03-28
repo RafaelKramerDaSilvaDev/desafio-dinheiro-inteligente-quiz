@@ -170,45 +170,51 @@ export function WaveHeader({ className = '' }: { className?: string }) {
 
 export function TitleBadge({ className = '' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 300 160" className={className} xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="badgeGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1a8c45" />
-          <stop offset="40%" stopColor="#0d5e2e" />
-          <stop offset="100%" stopColor="#073d1c" />
-        </linearGradient>
-        <filter id="badgeShadow" x="-5%" y="-5%" width="110%" height="120%">
-          <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.3" />
-        </filter>
-      </defs>
+    <div className={`relative ${className}`}>
+      {/* Glow effect behind badge */}
+      <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-2xl scale-110 animate-pulse" />
 
-      {/* Badge shape */}
-      <rect x="15" y="10" width="270" height="140" rx="18" fill="url(#badgeGrad)" filter="url(#badgeShadow)" />
+      {/* Main badge */}
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-primary-darker/40">
+        {/* Background gradient */}
+        <div className="bg-gradient-to-b from-primary via-primary-dark to-primary-darker px-8 py-6 md:px-12 md:py-8">
+          {/* Shine overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
-      {/* Subtle inner border */}
-      <rect x="20" y="15" width="260" height="130" rx="15" fill="none" stroke="#2aad5a" strokeWidth="1" opacity="0.3" />
+          {/* Inner border */}
+          <div className="absolute inset-[3px] rounded-[21px] border border-primary-lighter/20" />
 
-      {/* Top decorative line */}
-      <rect x="80" y="20" width="140" height="2" rx="1" fill="#2aad5a" opacity="0.3" />
+          {/* Decorative top line */}
+          <div className="flex items-center justify-center gap-3 mb-3 md:mb-4">
+            <div className="h-px w-8 md:w-12 bg-gradient-to-r from-transparent to-primary-lighter/40" />
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-light/60" />
+            <div className="h-px w-8 md:w-12 bg-gradient-to-l from-transparent to-primary-lighter/40" />
+          </div>
 
-      {/* Text: DESAFIO DO */}
-      <text x="150" y="55" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="600" fontSize="18" fill="#d0e8d8" letterSpacing="5">
-        DESAFIO DO
-      </text>
+          {/* DESAFIO DO */}
+          <p className="relative text-center text-primary-lighter/80 text-xs md:text-sm font-semibold tracking-[0.35em] uppercase mb-1 md:mb-2">
+            Desafio do
+          </p>
 
-      {/* Text: DINHEIRO */}
-      <text x="150" y="95" textAnchor="middle" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="42" fill="#f5d442">
-        <tspan filter="url(#badgeShadow)">DINHEIRO</tspan>
-      </text>
+          {/* DINHEIRO */}
+          <p className="relative text-center font-[family-name:var(--font-display)] text-amber-light text-4xl md:text-5xl lg:text-6xl font-black italic leading-none mb-0.5 md:mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" style={{textShadow: '0 0 30px rgba(251,191,36,0.3)'}}>
+            DINHEIRO
+          </p>
 
-      {/* Text: INTELIGENTE */}
-      <text x="150" y="135" textAnchor="middle" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="32" fill="#ffffff">
-        INTELIGENTE
-      </text>
+          {/* INTELIGENTE */}
+          <p className="relative text-center font-[family-name:var(--font-display)] text-white text-2xl md:text-3xl lg:text-4xl font-black italic leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+            INTELIGENTE
+          </p>
 
-      {/* Bottom decorative line */}
-      <rect x="80" y="143" width="140" height="2" rx="1" fill="#2aad5a" opacity="0.3" />
-    </svg>
+          {/* Decorative bottom line */}
+          <div className="flex items-center justify-center gap-3 mt-3 md:mt-4">
+            <div className="h-px w-8 md:w-12 bg-gradient-to-r from-transparent to-primary-lighter/40" />
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-light/60" />
+            <div className="h-px w-8 md:w-12 bg-gradient-to-l from-transparent to-primary-lighter/40" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,7 +1,8 @@
-import type { Question, QuizSession } from "./types";
+import type { Quiz, Question, Session, Play } from "./types";
 
-const STORAGE_KEY = "quiz-questions";
+const QUIZZES_KEY = "quiz-quizzes";
 const SESSIONS_KEY = "quiz-sessions";
+const TIMER_KEY = "quiz-timer-seconds";
 
 const defaultQuestions: Question[] = [
   {
@@ -119,31 +120,106 @@ const defaultQuestions: Question[] = [
   },
 ];
 
-export function getQuestions(): Question[] {
-  const stored = localStorage.getItem(STORAGE_KEY);
+function getDefaultQuiz(): Quiz {
+  return {
+    id: "default",
+    name: "Educação Financeira",
+    description: "Teste seus conhecimentos sobre educação financeira",
+    questions: defaultQuestions,
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export function getQuizzes(): Quiz[] {
+  const stored = localStorage.getItem(QUIZZES_KEY);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const quizzes = JSON.parse(stored) as Quiz[];
+      if (quizzes.length > 0) return quizzes;
     } catch {
-      return defaultQuestions;
+      // invalid data
     }
   }
-  return defaultQuestions;
+  const defaultQuiz = getDefaultQuiz();
+  saveQuizzes([defaultQuiz]);
+  return [defaultQuiz];
 }
 
-export function saveQuestions(questions: Question[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+export function saveQuizzes(quizzes: Quiz[]): void {
+  localStorage.setItem(QUIZZES_KEY, JSON.stringify(quizzes));
 }
 
-export function resetQuestions(): void {
-  localStorage.removeItem(STORAGE_KEY);
+export function getActiveQuiz(): Quiz | null {
+  const quizzes = getQuizzes();
+  return quizzes.find((q) => q.isActive && !q.isDeleted) ?? null;
 }
 
-export function getSessions(): QuizSession[] {
+export function setActiveQuiz(quizId: string): void {
+  const quizzes = getQuizzes();
+  quizzes.forEach((q) => (q.isActive = q.id === quizId));
+  saveQuizzes(quizzes);
+}
+
+export function addQuiz(quiz: Quiz): void {
+  const quizzes = getQuizzes();
+  quizzes.push(quiz);
+  saveQuizzes(quizzes);
+}
+
+export function updateQuiz(updated: Quiz): void {
+  const quizzes = getQuizzes();
+  const index = quizzes.findIndex((q) => q.id === updated.id);
+  if (index !== -1) {
+    quizzes[index] = updated;
+    saveQuizzes(quizzes);
+  }
+}
+
+export function softDeleteQuiz(quizId: string): void {
+  const quizzes = getQuizzes();
+  const quiz = quizzes.find((q) => q.id === quizId);
+  if (quiz) {
+    quiz.isDeleted = true;
+    if (quiz.isActive) {
+      quiz.isActive = false;
+      const available = quizzes.find((q) => !q.isDeleted && q.id !== quizId);
+      if (available) available.isActive = true;
+    }
+    saveQuizzes(quizzes);
+  }
+}
+
+export function restoreQuiz(quizId: string): void {
+  const quizzes = getQuizzes();
+  const quiz = quizzes.find((q) => q.id === quizId);
+  if (quiz) {
+    quiz.isDeleted = false;
+    saveQuizzes(quizzes);
+  }
+}
+
+export function permanentDeleteQuiz(quizId: string): void {
+  const quizzes = getQuizzes().filter((q) => q.id !== quizId);
+  saveQuizzes(quizzes);
+}
+
+export function getQuestions(): Question[] {
+  const quiz = getActiveQuiz();
+  return quiz?.questions ?? defaultQuestions;
+}
+
+export function getSessions(): Session[] {
   const stored = localStorage.getItem(SESSIONS_KEY);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        if ('plays' in parsed[0]) return parsed as Session[];
+        return migrateOldSessions(parsed);
+      }
+      return [];
     } catch {
       return [];
     }
@@ -151,14 +227,121 @@ export function getSessions(): QuizSession[] {
   return [];
 }
 
-export function saveSession(session: QuizSession): void {
-  const sessions = getSessions();
-  sessions.push(session);
+function migrateOldSessions(oldSessions: Array<{
+  id: string; quizId: string; quizName: string;
+  date: string; score: number; total: number;
+  answers: Array<{ questionId: string; questionText: string; selectedIndex: number; correctIndex: number }>;
+}>): Session[] {
+  const grouped = new Map<string, typeof oldSessions>();
+  oldSessions.forEach(s => {
+    const key = s.quizId;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)!.push(s);
+  });
+
+  const sessions: Session[] = [];
+  grouped.forEach((plays, quizId) => {
+    const first = plays[0];
+    sessions.push({
+      id: `migrated-${quizId}`,
+      name: first.quizName,
+      quizId,
+      quizName: first.quizName,
+      isActive: false,
+      isDeleted: false,
+      createdAt: first.date,
+      plays: plays.map(p => ({
+        id: p.id,
+        date: p.date,
+        score: p.score,
+        total: p.total,
+        answers: p.answers,
+      })),
+    });
+  });
+
+  if (sessions.length > 0) sessions[sessions.length - 1].isActive = true;
+  saveSessions(sessions);
+  return sessions;
+}
+
+export function saveSessions(sessions: Session[]): void {
   localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
 }
 
-export function clearSessions(): void {
-  localStorage.removeItem(SESSIONS_KEY);
+export function getActiveSession(): Session | null {
+  return getSessions().find(s => s.isActive && !s.isDeleted) ?? null;
 }
 
-export const ADMIN_PASSWORD = "quiz026";
+export function setActiveSession(sessionId: string): void {
+  const sessions = getSessions();
+  sessions.forEach(s => (s.isActive = s.id === sessionId));
+  saveSessions(sessions);
+}
+
+export function addSession(session: Session): void {
+  const sessions = getSessions();
+  sessions.push(session);
+  saveSessions(sessions);
+}
+
+export function updateSession(updated: Session): void {
+  const sessions = getSessions();
+  const index = sessions.findIndex(s => s.id === updated.id);
+  if (index !== -1) {
+    sessions[index] = updated;
+    saveSessions(sessions);
+  }
+}
+
+export function addPlayToSession(sessionId: string, play: Play): void {
+  const sessions = getSessions();
+  const session = sessions.find(s => s.id === sessionId);
+  if (session) {
+    session.plays.push(play);
+    saveSessions(sessions);
+  }
+}
+
+export function softDeleteSession(sessionId: string): void {
+  const sessions = getSessions();
+  const session = sessions.find(s => s.id === sessionId);
+  if (session) {
+    session.isDeleted = true;
+    if (session.isActive) {
+      session.isActive = false;
+      const available = sessions.find(s => !s.isDeleted && s.id !== sessionId);
+      if (available) available.isActive = true;
+    }
+    saveSessions(sessions);
+  }
+}
+
+export function restoreSession(sessionId: string): void {
+  const sessions = getSessions();
+  const session = sessions.find(s => s.id === sessionId);
+  if (session) {
+    session.isDeleted = false;
+    saveSessions(sessions);
+  }
+}
+
+export function permanentDeleteSession(sessionId: string): void {
+  const sessions = getSessions().filter(s => s.id !== sessionId);
+  saveSessions(sessions);
+}
+
+export function getTimerSeconds(): number {
+  const stored = localStorage.getItem(TIMER_KEY);
+  if (stored) {
+    const val = parseInt(stored, 10);
+    return isNaN(val) ? 0 : val;
+  }
+  return 0;
+}
+
+export function saveTimerSeconds(seconds: number): void {
+  localStorage.setItem(TIMER_KEY, String(seconds));
+}
+
+export const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "admin";

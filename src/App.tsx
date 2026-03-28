@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { Screen } from './types';
-import { getQuestions } from './store';
+import { getActiveSession, getQuizzes } from './store';
 import HomeScreen from './components/HomeScreen';
 import QuizScreen from './components/QuizScreen';
 import ResultScreen from './components/ResultScreen';
@@ -12,8 +12,12 @@ export default function App() {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   function handleStart() {
-    const questions = getQuestions();
-    setTotalQuestions(questions.length);
+    const session = getActiveSession();
+    if (!session) return;
+    const quizzes = getQuizzes();
+    const quiz = quizzes.find(q => q.id === session.quizId && !q.isDeleted);
+    if (!quiz || quiz.questions.length === 0) return;
+    setTotalQuestions(quiz.questions.length);
     setScreen('quiz');
   }
 
@@ -26,18 +30,26 @@ export default function App() {
     setScreen('home');
   }
 
+  const session = getActiveSession();
+  const quizzes = getQuizzes();
+  const quiz = session ? quizzes.find(q => q.id === session.quizId && !q.isDeleted) : null;
+
   return (
-    <div className="w-full max-w-md mx-auto min-h-[100dvh] relative">
+    <div className="w-full min-h-[100dvh] relative">
       {screen === 'home' && (
         <HomeScreen
+          sessionName={session?.name}
+          quizName={quiz?.name}
           onStart={handleStart}
           onAdmin={() => setScreen('admin')}
         />
       )}
-      {screen === 'quiz' && (
+      {screen === 'quiz' && quiz && session && (
         <QuizScreen
-          questions={getQuestions()}
+          questions={quiz.questions}
+          sessionId={session.id}
           onFinish={handleFinish}
+          onQuit={() => setScreen('home')}
         />
       )}
       {screen === 'result' && (
