@@ -126,7 +126,7 @@ function addPlaysTable(doc: jsPDF, plays: PlayWithMeta[], startY: number) {
   });
 }
 
-export function exportXLSX(plays: PlayWithMeta[], sessions: Session[]) {
+export function exportXLSX(plays: PlayWithMeta[], _sessions: Session[]) {
   const data = [...plays].reverse().map(p => {
     const date = new Date(p.date);
     const pct = (p.score / p.total) * 100;

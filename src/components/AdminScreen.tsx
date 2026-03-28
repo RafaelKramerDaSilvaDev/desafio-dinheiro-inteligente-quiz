@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import {
   ArrowLeft, LayoutDashboard, BookOpen, Pencil, Settings, Trash2,
-  Plus, Save, RotateCcw, ChevronDown, ChevronUp, X,
+  Plus, Save, ChevronDown, ChevronUp, X,
   Play, Archive, Undo2, FileDown, FileSpreadsheet,
   CheckCircle2, Clock, Users, TrendingUp, Layers,
   HardDrive, Download, Upload, AlertCircle, CheckCircle,
 } from 'lucide-react';
-import type { Question, Quiz, Session, Play as PlayType } from '../types';
+import type { Question, Quiz, Session } from '../types';
 import {
-  getQuizzes, saveQuizzes, setActiveQuiz,
+  getQuizzes,
   addQuiz, updateQuiz, softDeleteQuiz, restoreQuiz, permanentDeleteQuiz,
   getSessions, setActiveSession,
   addSession, softDeleteSession, restoreSession, permanentDeleteSession,
